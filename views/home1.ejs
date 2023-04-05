@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tagify Example</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.4.0/dist/tagify.css">
+</head>
+
+<body>
+    <h1>Dynamic Template Rendering</h1>
+    <form method="POST" action="/content">
+        <label for="input">Enter your message:</label>
+        <textarea name="input" id="input"></textarea>
+        <button type="submit">Render</button>
+    </form>
+    <br><br>
+
+    <div>
+        <input type="text" id="tag-input" placeholder="Type your tags and press Enter">
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.4.0/dist/jQuery.tagify.min.js"></script>
+    <script>
+        const input = document.getElementById('tag-input');
+
+        // Initialize Tagify on the input field
+        const tagify = new Tagify(input, {
+            duplicates: false, // prevent duplicate tags
+            enforceWhitelist: true, // only allow tags in whitelist
+            whitelist: ['tag1', 'tag2', 'tag3'], // whitelist of allowed tags
+            maxTags: 10, // maximum number of tags allowed
+            dropdown: {
+                enabled: 0, // disable dropdown suggestions
+                closeOnSelect: true // close dropdown on item selection
+            }
+        });
+
+        // Handle the "keyup" event to check if the user pressed the Enter key
+        input.addEventListener('keyup', function (event) {
+            if (event.keyCode === 13) { // Enter key pressed
+                event.preventDefault(); // prevent default behavior (e.g. form submission)
+
+                // Get the current value of the input field
+                const value = input.value.trim();
+
+                if (value) { // value is not empty
+                    // Check if the value is enclosed in curly braces
+                    const match = value.match(/^\{(.*)\}$/);
+
+                    if (match) { // value is enclosed in curly braces
+                        const tag = match[1].trim();
+
+                        // Check if the tag matches any tags in the whitelist
+                        const matchedTag = tagify.settings.whitelist.find(tag => tag.toLowerCase() === tag.toLowerCase());
+
+                        if (matchedTag) { // tag matches a tag in the whitelist
+                            // Add the tag to Tagify
+                            tagify.addTags(matchedTag);
+                        } else { // tag does not match a tag in the whitelist
+                            // Add the tag as a mixed tag to Tagify
+                            tagify.addMixTag(tag);
+                        }
+                    } else { // value is not enclosed in curly braces
+                        // Add the value as a mixed tag to Tagify
+                        tagify.addMixTag(value);
+                    }
+
+                    // Clear the input field
+                    input.value = '';
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

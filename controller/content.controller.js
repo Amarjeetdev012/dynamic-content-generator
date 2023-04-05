@@ -1,3 +1,5 @@
+import Tagify from '@yaireo/tagify';
+
 export const createContent = (req, res) => {
   try {
     const data = {
@@ -17,9 +19,17 @@ export const createContent = (req, res) => {
   }
 };
 
-export const generateOutput = (req, res) => {
-  console.log('called second');
-  const data = req.body;
-  console.log('data', data);
-  res.render('output', { fields: data });
+export const test = (req, res) => {
+  try {
+    console.log('data', req.body.text);
+    const inputText = req.body.text;
+    const tagify = new Tagify(addEventListener('input[name=tags]'));
+    tagify.addTags(inputText);
+    console.log('inputText', inputText);
+    console.log('tagify', tagify);
+    console.log('  tagify.addTags(inputText);', tagify.addTags(inputText));
+    res.redirect('/');
+  } catch (error) {
+    return res.status(500).send({ status: false, message: error });
+  }
 };

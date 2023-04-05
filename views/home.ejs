@@ -1,22 +1,60 @@
 <!DOCTYPE html>
-<!-- views/index.ejs -->
-
-<!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="UTF-8">
-    <title>Dynamic Template Rendering</title>
+	<title>Tag Input</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
+	<style>
+		.tagify__input {
+			border: none;
+			outline: none;
+			font-size: 16px;
+			padding: 10px;
+			border-radius: 5px;
+			box-shadow: 0 0 3px #ccc;
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.tagify__tag {
+			background-color: #007bff;
+			color: #fff;
+			padding: 3px 6px;
+			border-radius: 5px;
+			margin-right: 5px;
+			font-size: 14px;
+		}
+	</style>
 </head>
-
 <body>
-    <h1>Dynamic Template Rendering</h1>
-    <form method="POST" action="/content">
-        <label for="input">Enter your message:</label>
-        <textarea name="input" id="input"></textarea>
-        <button type="submit">Render</button>
-    </form>
+	<h1>Tag Input</h1>
+	<p>Type some text in the input field below and press Enter to turn it into a tag.</p>
+	<input type="text" id="inputField" class="tagify__input">
+	
+	<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+	<script>
+		let inputField = document.getElementById("inputField");
+		let tagify = new Tagify(inputField, {
+			mode: "mix",
+			delimiters: "{ }",
+			dropdown: {
+				enabled: 0
+			},
+			transformTag: function(tagData) {
+				return {
+					value: "{" + tagData.value + "}"
+				};
+			}
+		});
 
+		inputField.addEventListener("keydown", function(event) {
+			if (event.key === "Enter" && !tagify.isTagging()) {
+				event.preventDefault();
+				tagify.addTags(inputField.value);
+				inputField.value = "";
+			}
+		});
+	</script>
 </body>
-
 </html>
