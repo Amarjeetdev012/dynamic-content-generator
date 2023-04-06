@@ -48,9 +48,7 @@ export const tagconverter = async (req, res) => {
   try {
     const data = fs.readFileSync('people.json');
     const json = JSON.parse(data);
-    console.log('req.body data', req.body);
     const input = req.body.mixedinput;
-    console.log('input', input);
     const formattedMessages = json.people.map((person) => {
       let formattedMessage = input
         .replace(
@@ -61,7 +59,6 @@ export const tagconverter = async (req, res) => {
         .replace(/\[\[\{"value":"{gender}","prefix":"@"\}\]\]/g, person.gender);
       return formattedMessage;
     });
-    console.log('output', formattedMessages);
     res.render('field', { data: formattedMessages });
   } catch (error) {
     return res.status(500).send({ status: false, message: error });
