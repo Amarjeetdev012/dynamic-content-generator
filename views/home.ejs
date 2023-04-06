@@ -10,6 +10,7 @@
 
 <body>
     <h1>Dynamic Template Rendering</h1>
+    <h3>use {} for update using given options </h3>
     <form method="POST" action="/content">
         <label for="input">Enter your message:</label>
         <textarea name="input" id="input"></textarea>
@@ -23,6 +24,16 @@
         <textarea name="mix" id="input"></textarea>
         <button type="submit">Submit</button>
     </form>
+
+    <br><br>
+    <h2>Use $ then {} for make it dynamically add data through option</h2>
+    <h4>example: hi i am ${name}, i am ${age} old"
+        output of this will be "hi i am rahul, i am 26 old", "hi i am pavan i am 24 old"
+    </h4>
+    <form action="/tagconverter" method="post">
+        <textarea name="mix" id="input"></textarea>
+        <button type="submit">Submit</button>
+    </form>
     <script>
         // initialize Tagify
         var input = document.querySelector('[name=mix]'),
@@ -30,7 +41,7 @@
             tagify = new Tagify(input, {
                 mixTagsInterpolator: ["{{", "}}"],
                 mode: 'mix',  // <--  Enable mixed-content
-                pattern: /@|#/,  // <--  Text starting with @ or # (if single, String can be used here)
+                pattern: /@|#|$/,  // <--  Text starting with @ or # (if single, String can be used here)
                 tagTextProp: 'text',  // <-- the default property (from whitelist item) for the text to be rendered in a tag element.
                 // Array for initial interpolation, which allows only these tags to be used
                 dropdown: {
