@@ -9,29 +9,30 @@
 </head>
 
 <body>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Gender</th>
-        </tr>
-        <% data.forEach(function(item) { %>
-            <% var nameMatch=item.match(/my name is ([^\s]+)/i); %>
-                <% var ageMatch=item.match(/my age is (\d+)/i); %>
-                    <% var genderMatch=item.match(/my gender is (\w+)/i); %>
-                        <tr>
-                            <td>
-                                <%= nameMatch ? nameMatch[1] : '' %>
-                            </td>
-                            <td>
-                                <%= ageMatch ? ageMatch[1] : '' %>
-                            </td>
-                            <td>
-                                <%= genderMatch ? genderMatch[1] : '' %>
-                            </td>
-                        </tr>
-                        <% }); %>
-    </table>
+    <%= data %>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+            </tr>
+            <% data.forEach(function(item) { %>
+                <% var nameMatch=item.match(/my name is ([^\s]+)/i); %>
+                    <% var ageMatch=item.match(/my age is (\d+)/i); %>
+                        <% var genderMatch=item.match(/my gender is (\w+)/i); %>
+                            <tr>
+                                <td>
+                                    <%= nameMatch ? nameMatch[1] : '' %>
+                                </td>
+                                <td>
+                                    <%= ageMatch ? ageMatch[1] : '' %>
+                                </td>
+                                <td>
+                                    <%= genderMatch ? genderMatch[1] : '' %>
+                                </td>
+                            </tr>
+                            <% }); %>
+        </table>
 </body>
 
 </html>

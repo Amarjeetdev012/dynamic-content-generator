@@ -13,7 +13,6 @@ export const createContent = (req, res) => {
       /{(\w+)}/g,
       (match, key) => data[key]
     );
-    console.log('formattedMessage', formattedMessage);
     res.render('field', { formattedMessage });
   } catch (error) {
     return res.status(500).send({ status: false, message: error });
@@ -23,7 +22,6 @@ export const createContent = (req, res) => {
 export const test = (req, res) => {
   try {
     const data = req.body;
-    console.log('data', data);
     function filterText(input) {
       const str = data.mix;
       let filteredStr = str.replace(
@@ -37,13 +35,9 @@ export const test = (req, res) => {
       return filteredStr.trim();
     }
     const str = filterText(data);
-    console.log('str', str);
     const inputText = req.body.text;
     const tagify = new Tagify(addEventListener('input[name=tags]'));
     tagify.addTags(inputText);
-    console.log('inputText', inputText);
-    console.log('tagify', tagify);
-    console.log('  tagify.addTags(inputText);', tagify.addTags(inputText));
     res.redirect('/');
   } catch (error) {
     return res.status(500).send({ status: false, message: error });
@@ -52,7 +46,6 @@ export const test = (req, res) => {
 
 export const tagconverter = async (req, res) => {
   try {
-    console.log('req.body data', req.body);
     const data = fs.readFileSync('people.json');
     const json = JSON.parse(data);
     const input = req.body.mix;
@@ -66,7 +59,6 @@ export const tagconverter = async (req, res) => {
         .replace('{{{"value":"{gender}","prefix":"@"}}}', person.gender);
       return formattedMessage;
     });
-    console.log('formattedMessages', formattedMessages);
     res.render('field', { data: formattedMessages });
   } catch (error) {
     return res.status(500).send({ status: false, message: error });
