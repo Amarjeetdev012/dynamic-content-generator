@@ -35,12 +35,12 @@
 </head>
 
 <body>
+    <h4>example:hi i am @{name} i am @{age} /my gender is @{gender}</h4>
     <form action="/tagconverter" method="post">
         <label for="mixedinput">Mixed tags and text with manual suggestions after type @ get list:</label>
         <input type="text" id="mixedinput" name="mixedinput" />
         <button type="submit">Submit</button>
     </form>
-
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.2.0/dist/tagify.min.js"></script>
     <script>
         var mixedTagsInput = document.getElementById('mixedinput');
@@ -65,19 +65,15 @@
                     // Render the custom suggestions list and append it to the appendTarget element
                     var customSuggestionsList = document.createElement('ul');
                     customSuggestionsList.classList.add('customSuggestionsList');
-
                     // Loop through the tagData array and create a new list item for each item
                     tagData.forEach(function (item) {
                         var li = document.createElement('li');
                         li.textContent = item.value;
                         customSuggestionsList.appendChild(li);
                     });
-
                     tagify.DOM.dropdown.appendChild(customSuggestionsList);
-
                     // Show the custom suggestions list
                     customSuggestionsList.style.display = 'block';
-
                     // Attach click event listeners to each list item to add the corresponding tag
                     customSuggestionsList.querySelectorAll('li').forEach(function (li) {
                         li.addEventListener('click', function (e) {
