@@ -9,8 +9,20 @@
 </head>
 
 <body>
+    <h1>Dynamic Template Rendering</h1>
+    <form method="POST" action="/content">
+        <label for="input">Enter your message:</label>
+        <textarea name="input" id="input"></textarea>
+        <button type="submit">Render</button>
+    </form>
+    <br><br>
+
+
     <h2>use @ and # to make tag and press enter </h2>
-    <textarea name="mix" id="input"></textarea>
+    <form action="/test" method="post">
+        <textarea name="mix" id="input"></textarea>
+        <button type="submit">Submit</button>
+    </form>
     <script>
         // initialize Tagify
         var input = document.querySelector('[name=mix]'),

@@ -21,7 +21,13 @@ export const createContent = (req, res) => {
 
 export const test = (req, res) => {
   try {
-    console.log('data', req.body.text);
+    const data = req.body;
+    console.log('data', data);
+    const str = data.mix.replace(
+      /{{{"value":"([^"]+)","prefix":"[@#]"}}}/g,
+      '$1'
+    );
+    console.log('str', str);
     const inputText = req.body.text;
     const tagify = new Tagify(addEventListener('input[name=tags]'));
     tagify.addTags(inputText);
