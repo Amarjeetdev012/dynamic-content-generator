@@ -13,7 +13,7 @@ export const createContent = (req, res) => {
       /{(\w+)}/g,
       (match, key) => data[key]
     );
-    res.render('field', { formattedMessage });
+    res.render('output', { data: formattedMessage });
   } catch (error) {
     return res.status(500).send({ status: false, message: error });
   }
