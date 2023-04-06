@@ -22,7 +22,7 @@
             </tr>
             <% data.forEach(function(item) { %>
                 <% var nameMatch=item.match(/hi i am ([^\s]+)/i); %>
-                    <% var ageMatch=item.match(/i am (\d+) old/i); %>
+                    <% var ageMatch=item.match(/i am (\d+)/i); %>
                         <% var genderMatch=item.match(/my gender is (\w+)/i); %>
                             <tr>
                                 <td>
