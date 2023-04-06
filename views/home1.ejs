@@ -1,77 +1,64 @@
 <!DOCTYPE html>
-
-<!DOCTYPE html>
 <html>
 
 <head>
-    <title>Tagify Example</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.4.0/dist/tagify.css">
+    <title>Tag Input</title>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-    <h1>Dynamic Template Rendering</h1>
-    <form method="POST" action="/content">
-        <label for="input">Enter your message:</label>
-        <textarea name="input" id="input"></textarea>
-        <button type="submit">Render</button>
+
+    <h2>Use @ then {} for make it dynamically add data through option</h2>
+    <h4>example: hi i am @{name} click enter button after complete tag i am @{age} old my gender is @{gender}"
+        output of this will be "hi i am rahul, i am 26 old", "hi i am pavan i am 24 old"
+    </h4>
+    <form action="/tagconverter" method="post">
+        <textarea name="mix" id="input"></textarea>
+        <button type="submit">Submit</button>
     </form>
-    <br><br>
-
-    <div>
-        <input type="text" id="tag-input" placeholder="Type your tags and press Enter">
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.4.0/dist/jQuery.tagify.min.js"></script>
     <script>
-        const input = document.getElementById('tag-input');
-
-        // Initialize Tagify on the input field
-        const tagify = new Tagify(input, {
-            duplicates: false, // prevent duplicate tags
-            enforceWhitelist: true, // only allow tags in whitelist
-            whitelist: ['tag1', 'tag2', 'tag3'], // whitelist of allowed tags
-            maxTags: 10, // maximum number of tags allowed
-            dropdown: {
-                enabled: 0, // disable dropdown suggestions
-                closeOnSelect: true // close dropdown on item selection
-            }
-        });
-
-        // Handle the "keyup" event to check if the user pressed the Enter key
-        input.addEventListener('keyup', function (event) {
-            if (event.keyCode === 13) { // Enter key pressed
-                event.preventDefault(); // prevent default behavior (e.g. form submission)
-
-                // Get the current value of the input field
-                const value = input.value.trim();
-
-                if (value) { // value is not empty
-                    // Check if the value is enclosed in curly braces
-                    const match = value.match(/^\{(.*)\}$/);
-
-                    if (match) { // value is enclosed in curly braces
-                        const tag = match[1].trim();
-
-                        // Check if the tag matches any tags in the whitelist
-                        const matchedTag = tagify.settings.whitelist.find(tag => tag.toLowerCase() === tag.toLowerCase());
-
-                        if (matchedTag) { // tag matches a tag in the whitelist
-                            // Add the tag to Tagify
-                            tagify.addTags(matchedTag);
-                        } else { // tag does not match a tag in the whitelist
-                            // Add the tag as a mixed tag to Tagify
-                            tagify.addMixTag(tag);
-                        }
-                    } else { // value is not enclosed in curly braces
-                        // Add the value as a mixed tag to Tagify
-                        tagify.addMixTag(value);
-                    }
-
-                    // Clear the input field
-                    input.value = '';
+        // initialize Tagify
+        var input = document.querySelector('[name=mix]'),
+            // init Tagify script on the above inputs
+            tagify = new Tagify(input, {
+                mixTagsInterpolator: ["{{", "}}"],
+                mode: 'mix',  // <--  Enable mixed-content
+                pattern: /@|#/,  // <--  Text starting with @ or # (if single, String can be used here)
+                tagTextProp: 'text',  // <-- the default property (from whitelist item) for the text to be rendered in a tag element.
+                // Array for initial interpolation, which allows only these tags to be used
+                dropdown: {
+                    enabled: 1,
+                    position: 'text', // <-- render the suggestions list next to the typed text ("caret")
+                    mapValueTo: 'text', // <-- similar to above "tagTextProp" setting, but for the dropdown items
+                    highlightFirst: true  // automatically highlights first sugegstion item in the dropdown
+                },
+                callbacks: {
+                    add: console.log,  // callback when adding a tag
+                    remove: console.log   // callback when removing a tag
                 }
+            })
+        // A good place to pull server suggestion list accoring to the prefix/value
+        tagify.on('input', function (e) {
+            var prefix = e.detail.prefix;
+            console.log('prefix', prefix);
+            // first, clean the whitlist array, because the below code, while not, might be async,
+            // therefore it should be up to you to decide WHEN to render the suggestions dropdown
+            // tagify.settings.whitelist.length = 0;
+            if (prefix) {
+                if (prefix == '@')
+                    if (prefix == '#')
+                        if (e.detail.value.length > 1)
+                            tagify.dropdown.show(e.detail.value);
             }
-        });
+
+            console.log(tagify.value)
+            console.log('mix-mode "input" event value: ', e)
+        })
+        tagify.on('add', function (e) {
+            console.log(e)
+        })
     </script>
 </body>
 
