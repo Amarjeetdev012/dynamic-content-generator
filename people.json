@@ -1,0 +1,134 @@
+{
+  "people": [
+    {
+      "name": "Aarav Sharma",
+      "age": 23,
+      "gender": "Male"
+    },
+    {
+      "name": "Aditi Gupta",
+      "age": 32,
+      "gender": "Female"
+    },
+    {
+      "name": "Akash Singh",
+      "age": 28,
+      "gender": "Male"
+    },
+    {
+      "name": "Ananya Mehra",
+      "age": 21,
+      "gender": "Female"
+    },
+    {
+      "name": "Arya Chakraborty",
+      "age": 19,
+      "gender": "Male"
+    },
+    {
+      "name": "Asha Yadav",
+      "age": 45,
+      "gender": "Female"
+    },
+    {
+      "name": "Avinash Patel",
+      "age": 36,
+      "gender": "Male"
+    },
+    {
+      "name": "Deepika Reddy",
+      "age": 31,
+      "gender": "Female"
+    },
+    {
+      "name": "Dev Kumar",
+      "age": 42,
+      "gender": "Male"
+    },
+    {
+      "name": "Disha Khanna",
+      "age": 27,
+      "gender": "Female"
+    },
+    {
+      "name": "Gaurav Malhotra",
+      "age": 29,
+      "gender": "Male"
+    },
+    {
+      "name": "Geeta Verma",
+      "age": 38,
+      "gender": "Female"
+    },
+    {
+      "name": "Harish Rana",
+      "age": 33,
+      "gender": "Male"
+    },
+    {
+      "name": "Isha Sharma",
+      "age": 25,
+      "gender": "Female"
+    },
+    {
+      "name": "Jayant Gupta",
+      "age": 43,
+      "gender": "Male"
+    },
+    {
+      "name": "Kavya Singh",
+      "age": 26,
+      "gender": "Female"
+    },
+    {
+      "name": "Kunal Mehta",
+      "age": 35,
+      "gender": "Male"
+    },
+    {
+      "name": "Madhuri Patel",
+      "age": 41,
+      "gender": "Female"
+    },
+    {
+      "name": "Mahesh Gupta",
+      "age": 44,
+      "gender": "Male"
+    },
+    {
+      "name": "Mala Sinha",
+      "age": 37,
+      "gender": "Female"
+    },
+    {
+      "name": "Manish Kumar",
+      "age": 30,
+      "gender": "Male"
+    },
+    {
+      "name": "Maya Choudhary",
+      "age": 24,
+      "gender": "Female"
+    },
+    {
+      "name": "Mukesh Sharma",
+      "age": 46,
+      "gender": "Male"
+    },
+    {
+      "name": "Neha Kapoor",
+      "age": 34,
+      "gender": "Female"
+    },
+    {
+      "name": "Nikhil Singh",
+      "age": 31,
+      "gender": "Male"
+    },
+    {
+      "name": "Pooja Verma",
+      "age": 29,
+      "gender": "Female"
+    }
+  ]
+}

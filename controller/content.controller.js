@@ -1,4 +1,5 @@
 import Tagify from '@yaireo/tagify';
+import fs from 'fs';
 
 export const createContent = (req, res) => {
   try {
@@ -49,20 +50,24 @@ export const test = (req, res) => {
   }
 };
 
+
 export const tagconverter = async (req, res) => {
   try {
-    console.log('data', req.body);
-    const data = {
-      name: 'ram',
-      age: 25,
-      gender: 'male',
-    };
-    const input = req.body.input;
-    const formattedMessage = input.replace(
-      /{(\w+)}/g,
-      (match, key) => data[key]
-    );
+    console.log('req.body data', req.body);
+    const data = fs.readFileSync('people.json');
+    const json = JSON.parse(data);
+    const input = req.body.mix;
+    let formattedMessage = input;
+    const result = json.people.forEach((person) => {
+      formattedMessage = formattedMessage
+        .replace(
+          '{{{"value":"{name}","prefix":"@"}}}',
+          person.name.toLowerCase()
+        )
+        .replace('{{{"value":"{age}","prefix":"@"}}}', person.age);
+    });
     console.log('formattedMessage', formattedMessage);
+    console.log('result', result);
     res.render('field', { formattedMessage });
   } catch (error) {
     return res.status(500).send({ status: false, message: error });
