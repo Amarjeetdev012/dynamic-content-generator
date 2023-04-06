@@ -17,14 +17,6 @@
         <button type="submit">Render</button>
     </form>
     <br><br>
-
-
-    <!-- <h2>use @ and # to make tag and press enter </h2>
-    <form action="/test" method="post">
-        <textarea name="mix" id="input"></textarea>
-        <button type="submit">Submit</button>
-    </form> -->
-
     <br><br>
     <h2>Use @ then {} for make it dynamically add data through option</h2>
     <h4>example: hi i am @{name}, i am @{age} old"
@@ -62,7 +54,6 @@
             // first, clean the whitlist array, because the below code, while not, might be async,
             // therefore it should be up to you to decide WHEN to render the suggestions dropdown
             // tagify.settings.whitelist.length = 0;
-
             if (prefix) {
                 if (prefix == '@')
                     if (prefix == '#')
@@ -73,7 +64,6 @@
             console.log(tagify.value)
             console.log('mix-mode "input" event value: ', e)
         })
-
         tagify.on('add', function (e) {
             console.log(e)
         })
