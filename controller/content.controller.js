@@ -50,25 +50,24 @@ export const test = (req, res) => {
   }
 };
 
-
 export const tagconverter = async (req, res) => {
   try {
     console.log('req.body data', req.body);
     const data = fs.readFileSync('people.json');
     const json = JSON.parse(data);
     const input = req.body.mix;
-    let formattedMessage = input;
-    const result = json.people.forEach((person) => {
-      formattedMessage = formattedMessage
+    const formattedMessages = json.people.map((person) => {
+      let formattedMessage = input
         .replace(
           '{{{"value":"{name}","prefix":"@"}}}',
           person.name.toLowerCase()
         )
-        .replace('{{{"value":"{age}","prefix":"@"}}}', person.age);
+        .replace('{{{"value":"{age}","prefix":"@"}}}', person.age)
+        .replace('{{{"value":"{gender}","prefix":"@"}}}', person.gender);
+      return formattedMessage;
     });
-    console.log('formattedMessage', formattedMessage);
-    console.log('result', result);
-    res.render('field', { formattedMessage });
+    console.log('formattedMessages', formattedMessages);
+    res.render('field', { data: formattedMessages });
   } catch (error) {
     return res.status(500).send({ status: false, message: error });
   }
