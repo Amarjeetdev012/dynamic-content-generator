@@ -59,7 +59,6 @@ export const tagconverter = async (req, res) => {
         .replace(/\[\[\{"value":"{gender}","prefix":"@"\}\]\]/g, person.gender);
       return formattedMessage;
     });
-    console.log('output', formattedMessages);
     res.render('field', { data: formattedMessages });
   } catch (error) {
     return res.status(500).send({ status: false, message: error });
