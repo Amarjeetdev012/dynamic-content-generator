@@ -26,19 +26,19 @@
 </head>
 
 <body>
-    <h4>example:hi i am @{name} i am @{age} my gender is @{gender}</h4>
+    <h4>type @ and then after name of tag</h4>
     <form action="/tagconverter" method="post">
         <label for="mixedinput">Mixed tags and text with manual suggestions after type @ get list:</label>
-        <input name='tags-manual-suggestions' placeholder='write some tags'>
+        <input name='tagsuggestions' placeholder='write some tags'>
         <button type="submit">Submit</button>
     </form>
     <script>
         var whitelist_1 = [
-            { value: 800, text: 'randy', title: 'Randy Marsh' },
-            { value: 900, text: 'Mr. Garrison', title: 'POTUS' },
-            { value: 1000, text: 'Mr. Mackey', title: "M'Kay" }
+            { value: "{name}" },
+            { value: "{age}" },
+            { value: "{gender}" }
         ]
-        var input = document.querySelector('input[name=tags-manual-suggestions]'),
+        var input = document.querySelector('input[name=tagsuggestions]'),
             // init Tagify script on the above inputs
             tagify = new Tagify(input, {
                 mode: 'mix',
@@ -52,7 +52,34 @@
                     maxItems: Infinity,
                     highlightFirst: true,
                     enabled: 1,
-                    classname: "customSuggestionsList"
+                    classname: "customSuggestionsList",
+                    // Render suggestions list manually
+                    onCreateList: function (tagify, tagData) {
+                        // Render the custom suggestions list and append it to the appendTarget element
+                        var customSuggestionsList = document.createElement('ul');
+                        customSuggestionsList.classList.add('customSuggestionsList');
+                        // Loop through the tagData array and create a new list item for each item
+                        tagData.forEach(function (item) {
+                            var li = document.createElement('li');
+                            li.textContent = item.value;
+                            customSuggestionsList.appendChild(li);
+                        });
+                        tagify.DOM.dropdown.appendChild(customSuggestionsList);
+                        // Show the custom suggestions list
+                        customSuggestionsList.style.display = 'block';
+                        // Attach click event listeners to each list item to add the corresponding tag
+                        customSuggestionsList.querySelectorAll('li').forEach(function (li) {
+                            li.addEventListener('click', function (e) {
+                                var value = e.target.textContent;
+                                tagify.addTags(value);
+                                tagify.DOM.input.focus();
+                                console.log('value', value);
+                                // Add the selected tag to the whitelist array
+                                tagify.settings.whitelist.push({ value: value });
+                                tagify.dropdown.hide.call(tagify);
+                            });
+                        });
+                    },
                 },
                 callbacks: {
                     add: console.log,  // callback when adding a tag
@@ -64,7 +91,9 @@
                     }
                 },
                 enforceWhitelist: false
+
             })
+
 
         // A good place to pull server suggestion list accoring to the prefix/value
         tagify.on('input', function (e) {
@@ -77,7 +106,6 @@
                 if (prefix == '@')
                     tagify.whitelist = whitelist_1;
                 console.log('tagify===========', tagify.value)
-                tagify.addTags(tagify.value)
                 if (e.detail.value.length > 1)
                     tagify.dropdown.show(e.detail.value);
             }

@@ -48,7 +48,7 @@ export const tagconverter = async (req, res) => {
   try {
     const data = fs.readFileSync('people.json');
     const json = JSON.parse(data);
-    const input = req.body.mixedinput;
+    const input = req.body.tagsuggestions;
     const formattedMessages = json.people.map((person) => {
       let formattedMessage = input
         .replace(
