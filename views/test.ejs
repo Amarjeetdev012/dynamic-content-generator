@@ -9,43 +9,25 @@
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
     <style>
-        /* CSS for the custom suggestions list */
-        .customSuggestionsList {
+        #suggestions {
             position: absolute;
-            top: 100%;
+            top: 40px;
             left: 0;
             z-index: 999;
-            display: none;
-            padding: 0;
-            margin: 0;
-            border: 1px solid #3c3f76;
-            background-color: #487073;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-top: none;
             max-height: 200px;
             overflow-y: auto;
         }
 
-        .customSuggestionsList li {
-            list-style: none;
-            padding: 5px;
+        .dropdown-item {
+            padding: 4px;
             cursor: pointer;
         }
 
-        .customSuggestionsList li:hover {
-            background-color: #3b1d7c;
-        }
-
-        .customSuggestionsList>div {
-            max-height: 300px;
-            min-height: 50px;
-            border: 2px solid pink;
-            overflow: auto;
-        }
-
-        .customSuggestionsList .empty {
-            color: #999;
-            font-size: 20px;
-            text-align: center;
-            padding: 1em;
+        .dropdown-item:hover {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
@@ -53,61 +35,23 @@
 <body>
     <h4>example:hi i am @{name} i am @{age} my gender is @{gender}</h4>
     <form action="/tagconverter" method="post">
-        <label for="mixedinput">Mixed tags and text with manual suggestions after type @ get list:</label>
-        <input type="text" id="mixedinput" name="mixedinput" />
+        <div id="suggestions"></div>
+        <input type="text" id="tags-input" placeholder="Add tags" />
         <button type="submit">Submit</button>
     </form>
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.2.0/dist/tagify.min.js"></script>
     <script>
-        var mixedTagsInput = document.getElementById('mixedinput');
-        var whitelist_2 = ['{name}', '{age}', '{gender}'];
-        var mixedTagsTagify = new Tagify(mixedTagsInput, {
-            mode: 'mix',
-            pattern: /@|#/,
-            tagTextProp: 'text',
-            whitelist: whitelist_2.map(function (item) {
-                return { value: item };
-            }),
+        var input = document.querySelector('#tags-input');
+        var suggestions = document.querySelector('#suggestions');
+        tagify = new Tagify(input, {
+            whitelist: ['aaa', 'aaab', 'aaabb', 'aaabc', 'aaabe', 'aaacc'],
             dropdown: {
-                enabled: 0,
-                position: 'text',
-                mapValueTo: 'text',
-                highlightFirst: true,
-                appendTarget: document.body,
-                // Render suggestions list manually
-                onCreateList: function (tagify, tagData) {
-                    // Render the custom suggestions list and append it to the appendTarget element
-                    var customSuggestionsList = document.createElement('ul');
-                    customSuggestionsList.classList.add('customSuggestionsList');
-                    // Loop through the tagData array and create a new list item for each item
-                    tagData.forEach(function (item) {
-                        var li = document.createElement('li');
-                        li.textContent = item.value;
-                        customSuggestionsList.appendChild(li);
-                    });
-                    tagify.DOM.dropdown.appendChild(customSuggestionsList);
-                    // Show the custom suggestions list
-                    customSuggestionsList.style.display = 'block';
-                    // Attach click event listeners to each list item to add the corresponding tag
-                    customSuggestionsList.querySelectorAll('li').forEach(function (li) {
-                        li.addEventListener('click', function (e) {
-                            var value = e.target.textContent;
-                            tagify.addTags(value);
-                            tagify.DOM.input.focus();
-                            console.log('value', value);
-                            // Add the selected tag to the whitelist array
-                            tagify.settings.whitelist.push({ value: value });
-                            tagify.dropdown.hide.call(tagify);
-                        });
-                    });
-                },
-                // Hide the custom suggestions list when the regular dropdown is hidden
-                onHideDropdown: function () {
-                    var customSuggestionsList = document.querySelector('.customSuggestionsList');
-                    if (customSuggestionsList) {
-                        customSuggestionsList.style.display = 'none';
-                    }
-                }
+                classname: "color-blue",
+                enabled: 0,              // show the dropdown immediately on focus
+                maxItems: 5,
+                position: "text",         // place the dropdown near the typed text
+                closeOnSelect: false,          // keep the dropdown open after selecting a suggestion
+                highlightFirst: true
             }
         });
     </script>
