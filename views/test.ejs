@@ -8,7 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.2.0/dist/tagify.css" />
     <style>
         /* CSS for the custom suggestions list */
         .customSuggestionsList {
@@ -34,6 +33,20 @@
         .customSuggestionsList li:hover {
             background-color: #3b1d7c;
         }
+
+        .customSuggestionsList>div {
+            max-height: 300px;
+            min-height: 50px;
+            border: 2px solid pink;
+            overflow: auto;
+        }
+
+        .customSuggestionsList .empty {
+            color: #999;
+            font-size: 20px;
+            text-align: center;
+            padding: 1em;
+        }
     </style>
 </head>
 
@@ -48,7 +61,6 @@
     <script>
         var mixedTagsInput = document.getElementById('mixedinput');
         var whitelist_2 = ['{name}', '{age}', '{gender}'];
-
         var mixedTagsTagify = new Tagify(mixedTagsInput, {
             mode: 'mix',
             pattern: /@|#/,
@@ -62,7 +74,6 @@
                 mapValueTo: 'text',
                 highlightFirst: true,
                 appendTarget: document.body,
-
                 // Render suggestions list manually
                 onCreateList: function (tagify, tagData) {
                     // Render the custom suggestions list and append it to the appendTarget element
@@ -90,8 +101,6 @@
                         });
                     });
                 },
-
-
                 // Hide the custom suggestions list when the regular dropdown is hidden
                 onHideDropdown: function () {
                     var customSuggestionsList = document.querySelector('.customSuggestionsList');
@@ -101,7 +110,6 @@
                 }
             }
         });
-
     </script>
 </body>
 
