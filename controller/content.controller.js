@@ -46,6 +46,7 @@ export const test = (req, res) => {
 
 export const tagconverter = async (req, res) => {
   try {
+    console.log('tagconverter api called');
     const data = fs.readFileSync('people.json');
     const json = JSON.parse(data);
     const input = req.body.tagsuggestions;

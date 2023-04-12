@@ -1,4 +1,5 @@
 import express from 'express';
+import fs from 'fs';
 import { port } from './config.js';
 import router from './route/index.js';
 
@@ -10,7 +11,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.render('home');
+  const data = fs.readFileSync('people.json');
+  const json = JSON.parse(data);
+  res.render('test', { data: json });
 });
 app.use('/', router);
 

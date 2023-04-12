@@ -89,11 +89,11 @@
                     add: console.log,  // callback when adding a tag
                     remove: console.log   // callback when removing a tag
                 },
-                // templates: {
-                //     dropdownItemNoMatch() {
-                //         return `<div class='empty'>Nothing Found</div>`;
-                //     }
-                // },
+                templates: {
+                    dropdownItemNoMatch() {
+                        return `<div class='empty'>Nothing Found</div>`;
+                    }
+                },
                 enforceWhitelist: false
             })
         // A good place to pull server suggestion list accoring to the prefix/value
@@ -112,11 +112,9 @@
             console.log(tagify.value)
             console.log('mix-mode "input" event value: ', e.detail)
         })
-
         tagify.on('add', function (e) {
             console.log(e)
         })
-
         tagify.on("dropdown:show", onSuggestionsListUpdate)
             .on("dropdown:hide", onSuggestionsListHide)
             .on('dropdown:scroll', onDropdownScroll)
