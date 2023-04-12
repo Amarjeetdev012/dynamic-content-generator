@@ -36,12 +36,14 @@
         var input = document.querySelector('#mixedinput'),
             // init Tagify script on the above inputs
             tagify = new Tagify(input, {
+                mode: "mix",
+                pattern: /@|#/,
+                tagTextProp: 'text',
                 whitelist: ["CHIP - 8", "Clean", "COMPASS", "MSL", "MUMPS", "Mystic Programming L"],
                 tagTextProp: 'text',
                 dropdown: {
-                    mode: "mix",
-                    pattern: /@|#/,
                     position: "manual",
+                    position: 'text',
                     autoComplete: true,
                     maxItems: Infinity,
                     enabled: 1,
@@ -58,26 +60,27 @@
 
         // ES2015 argument destructuring
         function onSuggestionsListUpdate({ detail: suggestionsElm }) {
-            console.log(suggestionsElm)
+            console.log('suggestionsElm', suggestionsElm)
         }
-
         function onSuggestionsListHide() {
             console.log("hide dropdown")
         }
-
         function onDropdownScroll(e) {
             console.log(e.detail)
         }
-
         function renderSuggestionsList() {
             tagify.dropdown.show()
             tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
         }
-
         tagify.on('add', function () {
             renderSuggestionsList();
         });
+        tagify.on("input", function (event) {
+            console.log('event event ', event);
+            if (event.key === "Enter") {
 
+            }
+        });
     </script>
 </body>
 
