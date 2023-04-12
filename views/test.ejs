@@ -78,27 +78,6 @@
             renderSuggestionsList();
         });
 
-        // add a listener to the input field to handle user input
-        input.addEventListener('input', function (event) {
-            var value = event.target.value.trim();
-
-            // check if the user has typed a comma to indicate a new tag
-            if (value.endsWith(',')) {
-                // extract the tag text from the input value
-                var tagText = value.slice(0, -1);
-
-                // add the tag to Tagify
-                tagify.addTags(tagText);
-
-                // clear the input field
-                event.target.value = '';
-            } else {
-                // create a new element to display the text
-                var textElm = document.createElement('span');
-                textElm.textContent = value; // replace this with your text
-                tagify.DOM.input.parentNode.insertBefore(textElm, tagify.DOM.input.nextSibling);
-            }
-        });
     </script>
 </body>
 
