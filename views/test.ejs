@@ -34,9 +34,8 @@
     </form>
     <script>
         var input = document.querySelector('#mixedinput'),
-            // init Tagify script on the above inputs
             tagify = new Tagify(input, {
-                whitelist: ["CHIP - 8", "Clean", "COMPASS", "MSL", "MUMPS", "Mystic Programming L"],
+                whitelist: ["CHIP - 8", "Clean", "COMPASS", "MSL", "name", "MUMPS", "Mystic Programming L"],
                 mode: "mix",
                 dropdown: {
                     delimiters: ",|.| ",
@@ -44,7 +43,7 @@
                     pattern: /@|#/,
                     tagTextProp: 'value',
                     position: "all",
-                    // position: 'text',
+                    position: 'text',
                     autoComplete: true,
                     maxItems: Infinity,
                     enabled: 1,
@@ -57,21 +56,17 @@
             .on("dropdown:hide", onSuggestionsListHide)
             .on('dropdown:scroll', onDropdownScroll)
 
-        // renderSuggestionsList()  // defined down below
-
-        // ES2015 argument destructuring
         function onSuggestionsListUpdate({ detail: suggestionsElm }) {
             tagify.dropdown.show()
-            tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
         }
         function onSuggestionsListHide() {
+            tagify.dropdown.hide()
             console.log("hide dropdown")
         }
         function onDropdownScroll(e) {
             console.log(e.detail)
         }
         function renderSuggestionsList() {
-            console.log('tagify data', tagify);
             tagify.dropdown.show()
             tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
         }
@@ -82,8 +77,6 @@
             tagify.dropdown.show()
         });
         tagify.on('input', function (e) {
-            console.log('input input ', e.detail.value);
-            console.log('tagify tagify ', tagify);
             tagify.dropdown.show()
         })
     </script>

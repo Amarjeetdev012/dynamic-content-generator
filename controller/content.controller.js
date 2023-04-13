@@ -46,18 +46,15 @@ export const test = (req, res) => {
 
 export const tagconverter = async (req, res) => {
   try {
-    console.log('tagconverter api called');
+    console.log('tagconverter api called', req.body);
     const data = fs.readFileSync('people.json');
     const json = JSON.parse(data);
-    const input = req.body.tagsuggestions;
+    const input = req.body.mixedinput;
     const formattedMessages = json.people.map((person) => {
       let formattedMessage = input
-        .replace(
-          /\[\[\{"value":"{name}","prefix":"@"\}\]\]/g,
-          person.name.toLowerCase()
-        )
-        .replace(/\[\[\{"value":"{age}","prefix":"@"\}\]\]/g, person.age)
-        .replace(/\[\[\{"value":"{gender}","prefix":"@"\}\]\]/g, person.gender);
+        .replace(/\[\[\{"value":"name"}\]\]/g, person.name.toLowerCase())
+        .replace(/\[\[\{"value":"age"}\]\]/g, person.age)
+        .replace(/\[\[\{"value":"gender"}\]\]/g, person.gender);
       return formattedMessage;
     });
     res.render('field', { data: formattedMessages });
