@@ -42,18 +42,28 @@
                     tagify = new Tagify(input, {
                         whitelist: keys,
                         mode: "mix",
+                        editTags: 1,
+                        duplicates: true, // allow duplicate tag values
                         dropdown: {
-                            duplicate: false,
                             pattern: /@|#/,
-                            position: "all",
                             position: 'text',
+                            includeSelectedTags: true, //enable tag to write again in tags field
                             autoComplete: true,
+                            editTags: true,
                             maxItems: Infinity,
                             enabled: 1,
-                            classname: "customSuggestionsList"
+                            classname: "customSuggestionsList",
+                            keepOpen: true
                         },
-                        enforceWhitelist: false
+                        enforceWhitelist: false,
                     })
+
+                tagify.on("dropdown:select", function (e) {
+                    const selectedTag = e.detail.data;
+                    tagify.addTags(selectedTag.value);
+                    tagify.settings.whitelist.push(selectedTag);
+                    console.log('tagify setting', tagify.suggestedListItems);
+                });
 
                 tagify.on("dropdown:show", onSuggestionsListUpdate)
                     .on("dropdown:hide", onSuggestionsListHide)
@@ -65,7 +75,6 @@
 
                 function onSuggestionsListHide() {
                     tagify.dropdown.hide()
-                    console.log("hide dropdown")
                 }
 
                 function onDropdownScroll(e) {
@@ -75,13 +84,8 @@
                     tagify.dropdown.show()
                     tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
                 }
-
-                tagify.on('add', function () {
-                    renderSuggestionsList();
-                });
-
                 tagify.on('focus', function () {
-                    console.log('tagify', tagify);
+                    console.log('tagify focus tagify data', tagify);
                     tagify.dropdown.show()
                 });
 
