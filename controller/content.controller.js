@@ -46,19 +46,16 @@ export const test = (req, res) => {
 
 export const tagconverter = async (req, res) => {
   try {
-    console.log('tagconverter api called', req.body);
-    const data = fs.readFileSync('people.json');
-    const json = JSON.parse(data);
     const input = req.body.mixedinput;
-    const formattedMessages = json.people.map((person) => {
-      let formattedMessage = input
-        .replace(/\[\[\{"value":"name"}\]\]/g, person.name.toLowerCase())
-        .replace(/\[\[\{"value":"age"}\]\]/g, person.age)
-        .replace(/\[\[\{"value":"gender"}\]\]/g, person.gender);
-      return formattedMessage;
-    });
-    res.render('field', { data: formattedMessages });
+    const text = input.replace(/\[\[\{\"value\":\"(\w+)\"\}\]\]/g, '{data.$1}');
+    return res.status(200).send(text);
   } catch (error) {
     return res.status(500).send({ status: false, message: error });
   }
+};
+
+export const jsondata = (req, res) => {
+  const data = fs.readFileSync('people.json');
+  const json = JSON.parse(data);
+  res.status(200).send(json);
 };

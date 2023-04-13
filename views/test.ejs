@@ -30,56 +30,68 @@
     <form action="/tagconverter" method="post">
         <label for="mixedinput">Mixed tags and text </label>
         <input type="text" id="mixedinput" name="mixedinput" />
+        <br>
         <button type="submit">Submit</button>
     </form>
     <script>
-        var input = document.querySelector('#mixedinput'),
-            tagify = new Tagify(input, {
-                whitelist: ["CHIP - 8", "Clean", "COMPASS", "MSL", "name", "MUMPS", "Mystic Programming L"],
-                mode: "mix",
-                dropdown: {
-                    delimiters: ",|.| ",
-                    duplicate: false,
-                    pattern: /@|#/,
-                    tagTextProp: 'value',
-                    position: "all",
-                    position: 'text',
-                    autoComplete: true,
-                    maxItems: Infinity,
-                    enabled: 1,
-                    classname: "customSuggestionsList"
-                },
-                enforceWhitelist: false
+        fetch('data')
+            .then(async (response) => {
+                const data = await response.json()
+                const keys = Object.keys(data.people[0]); // extract keys from the first object in the array
+                var input = document.querySelector('#mixedinput'),
+                    tagify = new Tagify(input, {
+                        whitelist: keys,
+                        mode: "mix",
+                        dropdown: {
+                            duplicate: false,
+                            pattern: /@|#/,
+                            position: "all",
+                            position: 'text',
+                            autoComplete: true,
+                            maxItems: Infinity,
+                            enabled: 1,
+                            classname: "customSuggestionsList"
+                        },
+                        enforceWhitelist: false
+                    })
+
+                tagify.on("dropdown:show", onSuggestionsListUpdate)
+                    .on("dropdown:hide", onSuggestionsListHide)
+                    .on('dropdown:scroll', onDropdownScroll)
+
+                function onSuggestionsListUpdate({ detail: suggestionsElm }) {
+                    tagify.dropdown.show()
+                }
+
+                function onSuggestionsListHide() {
+                    tagify.dropdown.hide()
+                    console.log("hide dropdown")
+                }
+
+                function onDropdownScroll(e) {
+                }
+
+                function renderSuggestionsList() {
+                    tagify.dropdown.show()
+                    tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
+                }
+
+                tagify.on('add', function () {
+                    renderSuggestionsList();
+                });
+
+                tagify.on('focus', function () {
+                    console.log('tagify', tagify);
+                    tagify.dropdown.show()
+                });
+
+                tagify.on('input', function (e) {
+                    tagify.dropdown.show()
+                })
             })
-
-        tagify.on("dropdown:show", onSuggestionsListUpdate)
-            .on("dropdown:hide", onSuggestionsListHide)
-            .on('dropdown:scroll', onDropdownScroll)
-
-        function onSuggestionsListUpdate({ detail: suggestionsElm }) {
-            tagify.dropdown.show()
-        }
-        function onSuggestionsListHide() {
-            tagify.dropdown.hide()
-            console.log("hide dropdown")
-        }
-        function onDropdownScroll(e) {
-            console.log(e.detail)
-        }
-        function renderSuggestionsList() {
-            tagify.dropdown.show()
-            tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
-        }
-        tagify.on('add', function () {
-            renderSuggestionsList();
-        });
-        tagify.on('focus', function () {
-            tagify.dropdown.show()
-        });
-        tagify.on('input', function (e) {
-            tagify.dropdown.show()
-        })
+            .catch(error => console.error(error));
     </script>
+
 </body>
 
 </html>

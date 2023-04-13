@@ -12,31 +12,6 @@
     <h1>complete data </h1>
     <%= data %>
         <br><br><br>
-
-        <h1>table format data</h1>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Gender</th>
-            </tr>
-            <% data.forEach(function(item) { %>
-                <% var nameMatch=item.match(/hi i am ([^\s]+)/i); %>
-                    <% var ageMatch=item.match(/i am (\d+)/i); %>
-                        <% var genderMatch=item.match(/my gender is (\w+)/i); %>
-                            <tr>
-                                <td>
-                                    <%= nameMatch ? nameMatch[1] : '' %>
-                                </td>
-                                <td>
-                                    <%= ageMatch ? ageMatch[1] : '' %>
-                                </td>
-                                <td>
-                                    <%= genderMatch ? genderMatch[1] : '' %>
-                                </td>
-                            </tr>
-                            <% }); %>
-        </table>
 </body>
 
 </html>

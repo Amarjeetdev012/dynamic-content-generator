@@ -1,15 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tagify Example</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.2.0/dist/tagify.css" />
+    <style>
+        .customSuggestionsList>div {
+            max-height: 300px;
+            min-height: 50px;
+            border: 2px solid pink;
+            overflow: auto;
+        }
+
+        .customSuggestionsList .empty {
+            color: #999;
+            font-size: 20px;
+            text-align: center;
+            padding: 1em;
+        }
+    </style>
 </head>
 
 <body>
-    <%= data %>
+    <form action="/tagconverter" method="post">
+        <label for="mixedinput">Mixed tags and text </label>
+        <input type="text" id="mixedinput" name="mixedinput" />
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        fetch('data')
+            .then(async (response) => {
+                const data = await response.json();
+                const result = data.people;
+                const array = [...result];
+                peopleData = array.map(person => ({
+                    value: person.name,
+                    age: person.age,
+                    gender: person.gender
+                }));
+                console.log('result', peopleData);
+            })
+            .catch(error => console.error(error));
+        // 
+        var input = document.querySelector('#mixedinput'),
+            tagify = new Tagify(input, {
+                whitelist: peopleData,
+                mode: "mix",
+                dropdown: {
+                    delimiters: ",|.| ",
+                    duplicate: false,
+                    pattern: /@|#/,
+                    tagTextProp: 'value',
+                    position: "all",
+                    position: 'text',
+                    autoComplete: true,
+                    maxItems: Infinity,
+                    enabled: 1,
+                    classname: "customSuggestionsList"
+                },
+                enforceWhitelist: false
+            })
+
+        tagify.on("dropdown:show", onSuggestionsListUpdate)
+            .on("dropdown:hide", onSuggestionsListHide)
+            .on('dropdown:scroll', onDropdownScroll)
+
+        function onSuggestionsListUpdate({ detail: suggestionsElm }) {
+            tagify.dropdown.show()
+        }
+        function onSuggestionsListHide() {
+            tagify.dropdown.hide()
+            console.log("hide dropdown")
+        }
+        function onDropdownScroll(e) {
+            console.log(e.detail)
+        }
+        function renderSuggestionsList() {
+            tagify.dropdown.show()
+            tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
+        }
+        tagify.on('add', function () {
+            renderSuggestionsList();
+        });
+        tagify.on('focus', function () {
+            tagify.dropdown.show()
+        });
+        tagify.on('input', function (e) {
+            tagify.dropdown.show()
+        })
+    </script>
 </body>
 
 </html>
