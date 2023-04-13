@@ -39,12 +39,12 @@
                 const data = await response.json()
                 const keys = Object.keys(data.people[0]); // extract keys from the first object in the array
                 var input = document.querySelector('#mixedinput'),
-                    tagify = new Tagify(input, {
+                    tagify = new Tagify(input, { // 635 core settings
                         whitelist: keys,
                         mode: "mix",
                         editTags: 1,
-                        duplicates: true, // allow duplicate tag values
-                        dropdown: {
+                        duplicates: false, //  true allow duplicate tag values false not allowing duplicate values
+                        dropdown: { //dropdown setting 55
                             pattern: /@|#/,
                             position: 'text',
                             includeSelectedTags: true, //enable tag to write again in tags field
@@ -55,13 +55,11 @@
                             classname: "customSuggestionsList",
                             keepOpen: true
                         },
-                        enforceWhitelist: false,
+                        enforceWhitelist: true,
                     })
 
                 tagify.on("dropdown:select", function (e) {
                     const selectedTag = e.detail.data;
-                    tagify.addTags(selectedTag.value);
-                    tagify.settings.whitelist.push(selectedTag);
                     console.log('tagify setting', tagify.suggestedListItems);
                 });
 
