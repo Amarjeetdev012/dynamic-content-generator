@@ -9,13 +9,95 @@
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
     <style>
+        /* Style the tag input field */
+        .tagify {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 16px;
+            min-height: 40px;
+        }
+
+        /* Style the tag suggestions dropdown */
+        .tagify__dropdown {
+            position: absolute;
+            z-index: 10;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-top: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        /* Style the tag suggestions */
+        .tagify__dropdown__item {
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Style the tag suggestions on hover */
+        .tagify__dropdown__item:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Style the input field */
+        #mixedinput {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            min-height: 40px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+
+        /* Style the submit button */
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Change button color on hover */
+        button[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+
+        /* Style the form */
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f2f2f2;
+        }
+
+        /* Style the label */
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Style the custom suggestions list */
         .customSuggestionsList>div {
-            max-height: 300px;
+            max-height: 200px;
             min-height: 50px;
-            border: 2px solid rgb(44, 39, 200);
+            border: 2px solid #4CAF50;
+            border-radius: 4px;
             overflow: auto;
         }
     </style>
+
 </head>
 
 <body>
@@ -32,6 +114,7 @@
                 const keys = Object.keys(data.people[0]); // extract keys from the first object in the array
                 var input = document.querySelector('#mixedinput'),
                     tagify = new Tagify(input, { // 635 core settings
+                        enforceWhitelist: false,
                         mode: "mix",   //Use `select` for single-value dropdown-like select box. See `mix` as value to allow mixed-content. The `pattern` setting must be set to some character.
                         pattern: /@|#/,  //Validate input by RegEx pattern (can also be applied on the input itself as an attribute).
                         whitelist: keys,    // An array of allowed tags.

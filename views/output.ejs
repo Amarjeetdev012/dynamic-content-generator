@@ -8,20 +8,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.2.0/dist/tagify.css" />
     <style>
         .customSuggestionsList>div {
             max-height: 300px;
             min-height: 50px;
-            border: 2px solid pink;
+            border: 2px solid rgb(44, 39, 200);
             overflow: auto;
-        }
-
-        .customSuggestionsList .empty {
-            color: #999;
-            font-size: 20px;
-            text-align: center;
-            padding: 1em;
         }
     </style>
 </head>
@@ -30,70 +22,46 @@
     <form action="/tagconverter" method="post">
         <label for="mixedinput">Mixed tags and text </label>
         <input type="text" id="mixedinput" name="mixedinput" />
+        <br>
         <button type="submit">Submit</button>
     </form>
     <script>
         fetch('data')
             .then(async (response) => {
-                const data = await response.json();
-                const result = data.people;
-                const array = [...result];
-                peopleData = array.map(person => ({
-                    value: person.name,
-                    age: person.age,
-                    gender: person.gender
-                }));
-                console.log('result', peopleData);
+                const data = await response.json()
+                const keys = Object.keys(data.people[0]); // extract keys from the first object in the array
+                var input = document.querySelector('#mixedinput'),
+                    tagify = new Tagify(input, { // 635 core settings
+                        mode: "mix",   //Use `select` for single-value dropdown-like select box. See `mix` as value to allow mixed-content. The `pattern` setting must be set to some character.
+                        pattern: /@|#/,  //Validate input by RegEx pattern (can also be applied on the input itself as an attribute).
+                        whitelist: keys,    // An array of allowed tags.
+                        dropdown: { //dropdown setting 55
+                            position: 'text',  // 'manual' | 'text' | 'input' | 'all';
+                            includeSelectedTags: true, //enable tag to write again in tags field.
+                            classname: "customSuggestionsList", // Custom class name for the dropdown suggestions list. for css use,
+                        },
+                    })
+
+                // 1263
+                tagify.on('dropdown:show', function (data) {
+                    tagify.dropdown.show()
+                })
+
+                // The component has received focus.
+                tagify.on('focus', function () {
+                    tagify.dropdown.show()
+                });
+
+                tagify.on('dropdown:select', function (e) {
+                    var value = e.detail.data
+                    tagify.addMixTags(value);
+                    tagify.dropdown.hide()
+                });
+
             })
             .catch(error => console.error(error));
-        // 
-        var input = document.querySelector('#mixedinput'),
-            tagify = new Tagify(input, {
-                whitelist: peopleData,
-                mode: "mix",
-                dropdown: {
-                    delimiters: ",|.| ",
-                    duplicate: false,
-                    pattern: /@|#/,
-                    tagTextProp: 'value',
-                    position: "all",
-                    position: 'text',
-                    autoComplete: true,
-                    maxItems: Infinity,
-                    enabled: 1,
-                    classname: "customSuggestionsList"
-                },
-                enforceWhitelist: false
-            })
-
-        tagify.on("dropdown:show", onSuggestionsListUpdate)
-            .on("dropdown:hide", onSuggestionsListHide)
-            .on('dropdown:scroll', onDropdownScroll)
-
-        function onSuggestionsListUpdate({ detail: suggestionsElm }) {
-            tagify.dropdown.show()
-        }
-        function onSuggestionsListHide() {
-            tagify.dropdown.hide()
-            console.log("hide dropdown")
-        }
-        function onDropdownScroll(e) {
-            console.log(e.detail)
-        }
-        function renderSuggestionsList() {
-            tagify.dropdown.show()
-            tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
-        }
-        tagify.on('add', function () {
-            renderSuggestionsList();
-        });
-        tagify.on('focus', function () {
-            tagify.dropdown.show()
-        });
-        tagify.on('input', function (e) {
-            tagify.dropdown.show()
-        })
     </script>
+
 </body>
 
 </html>
