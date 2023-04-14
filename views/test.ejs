@@ -8,20 +8,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.2.0/dist/tagify.css" />
     <style>
         .customSuggestionsList>div {
             max-height: 300px;
             min-height: 50px;
-            border: 2px solid pink;
+            border: 2px solid rgb(44, 39, 200);
             overflow: auto;
-        }
-
-        .customSuggestionsList .empty {
-            color: #999;
-            font-size: 20px;
-            text-align: center;
-            padding: 1em;
         }
     </style>
 </head>
@@ -40,35 +32,30 @@
                 const keys = Object.keys(data.people[0]); // extract keys from the first object in the array
                 var input = document.querySelector('#mixedinput'),
                     tagify = new Tagify(input, { // 635 core settings
-                        whitelist: keys,    // An array of allowed tags.
                         mode: "mix",   //Use `select` for single-value dropdown-like select box. See `mix` as value to allow mixed-content. The `pattern` setting must be set to some character.
                         pattern: /@|#/,  //Validate input by RegEx pattern (can also be applied on the input itself as an attribute).
+                        whitelist: keys,    // An array of allowed tags.
                         dropdown: { //dropdown setting 55
                             position: 'text',  // 'manual' | 'text' | 'input' | 'all';
-                            includeSelectedTags: true, //enable tag to write again in tags field
-                            classname: "customSuggestionsList", // Custom class name for the dropdown suggestions list. for css use
+                            includeSelectedTags: true, //enable tag to write again in tags field.
+                            classname: "customSuggestionsList", // Custom class name for the dropdown suggestions list. for css use,
                         },
                     })
 
                 // 1263
-                // A suggestions dropdown item got selected (by mouse / keyboard / touch 
-                tagify.on('dropdown:select', function (data, dropdown, event) {
-                    console.log('data', data);
-                    console.log('elm', dropdown);
-                    console.log('event', event);
-                    const selectedTag = e.detail.data;
-                    console.log('tagify setting', tagify.suggestedListItems);
-                    console.log('dropdown:select');
-                });
-
-                // suggestions dropdown is about to be rendered. The dropdown DOM node is passed to the callback.
-                tagify.on('dropdown:show', function onSuggestionsListUpdate({ detail: suggestionsElm }) {
+                tagify.on('dropdown:show', function (data) {
                     tagify.dropdown.show()
                 })
 
                 // The component has received focus.
                 tagify.on('focus', function () {
                     tagify.dropdown.show()
+                });
+
+                tagify.on('dropdown:select', function (e) {
+                    var value = e.detail.data
+                    tagify.addMixTags(value);
+                    tagify.dropdown.hide()
                 });
 
             })
