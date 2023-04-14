@@ -40,56 +40,37 @@
                 const keys = Object.keys(data.people[0]); // extract keys from the first object in the array
                 var input = document.querySelector('#mixedinput'),
                     tagify = new Tagify(input, { // 635 core settings
-                        whitelist: keys,
-                        mode: "mix",
-                        editTags: 1,
-                        duplicates: false, //  true allow duplicate tag values false not allowing duplicate values
+                        whitelist: keys,    // An array of allowed tags.
+                        mode: "mix",   //Use `select` for single-value dropdown-like select box. See `mix` as value to allow mixed-content. The `pattern` setting must be set to some character.
+                        pattern: /@|#/,  //Validate input by RegEx pattern (can also be applied on the input itself as an attribute).
                         dropdown: { //dropdown setting 55
-                            pattern: /@|#/,
-                            position: 'text',
+                            position: 'text',  // 'manual' | 'text' | 'input' | 'all';
                             includeSelectedTags: true, //enable tag to write again in tags field
-                            autoComplete: true,
-                            editTags: true,
-                            maxItems: Infinity,
-                            enabled: 1,
-                            classname: "customSuggestionsList",
-                            keepOpen: true
+                            classname: "customSuggestionsList", // Custom class name for the dropdown suggestions list. for css use
                         },
-                        enforceWhitelist: true,
                     })
 
-                tagify.on("dropdown:select", function (e) {
+                // 1263
+                // A suggestions dropdown item got selected (by mouse / keyboard / touch 
+                tagify.on('dropdown:select', function (data, dropdown, event) {
+                    console.log('data', data);
+                    console.log('elm', dropdown);
+                    console.log('event', event);
                     const selectedTag = e.detail.data;
                     console.log('tagify setting', tagify.suggestedListItems);
+                    console.log('dropdown:select');
                 });
 
-                tagify.on("dropdown:show", onSuggestionsListUpdate)
-                    .on("dropdown:hide", onSuggestionsListHide)
-                    .on('dropdown:scroll', onDropdownScroll)
-
-                function onSuggestionsListUpdate({ detail: suggestionsElm }) {
-                    tagify.dropdown.show()
-                }
-
-                function onSuggestionsListHide() {
-                    tagify.dropdown.hide()
-                }
-
-                function onDropdownScroll(e) {
-                }
-
-                function renderSuggestionsList() {
-                    tagify.dropdown.show()
-                    tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
-                }
-                tagify.on('focus', function () {
-                    console.log('tagify focus tagify data', tagify);
-                    tagify.dropdown.show()
-                });
-
-                tagify.on('input', function (e) {
+                // suggestions dropdown is about to be rendered. The dropdown DOM node is passed to the callback.
+                tagify.on('dropdown:show', function onSuggestionsListUpdate({ detail: suggestionsElm }) {
                     tagify.dropdown.show()
                 })
+
+                // The component has received focus.
+                tagify.on('focus', function () {
+                    tagify.dropdown.show()
+                });
+
             })
             .catch(error => console.error(error));
     </script>
