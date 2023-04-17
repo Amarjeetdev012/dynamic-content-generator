@@ -52,10 +52,14 @@
                     tagify.dropdown.show()
                 });
 
+                var arr = []
+                // 1799
+                // only working with adding tags
                 tagify.on('dropdown:select', function (e) {
+                    tagify.removeAllTags(value)
                     var value = e.detail.data
-                    tagify.addMixTags(value);
-                    tagify.dropdown.hide()
+                    arr.push(value)
+                    tagify.addTags(arr)
                 });
 
             })
